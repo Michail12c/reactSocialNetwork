@@ -15,6 +15,7 @@
 .app-wrapper-content{
   grid-area: contentName;
   background-color: cornflowerblue ;
+  overflow: hidden;
 }
 
 
