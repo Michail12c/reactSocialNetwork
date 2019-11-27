@@ -1,6 +1,6 @@
 import React from 'react';
 import c from './Dialogs.module.css';
-import {NavLink} from 'react-router-dom';
+import {NavLink, Redirect} from 'react-router-dom';
 import DialogItem from './DialogItem/DialogItem.js';
 import Message from './Message/Message.js';
 
@@ -21,6 +21,8 @@ let onUpdateChange = (e) => {
   let body = e.target.value;
   props.updateNewMessedgBody(body);
 }
+
+ if (!props.isAuth) return <Redirect to = '/login'/>
   return (
      <div className = {c.dialogs}>
        <div className={c.dialogItems}>
