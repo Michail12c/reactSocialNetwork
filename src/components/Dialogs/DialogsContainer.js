@@ -1,6 +1,6 @@
 import React from 'react';
 import c from './Dialogs.module.css';
-import {addMessageActionCreator, onUpdateChangeActionCreator} from "../../redux/dialogs-reducer.js";
+import {addMessageActionCreator} from "../../redux/dialogs-reducer.js";
 import Dialogs from './Dialogs.js';
 import {connect} from 'react-redux';
 import {withAuthRedirect} from '../hoc/withAuthRedirect.js';
@@ -16,11 +16,8 @@ let mapStateToProps = (state) => {
 
 let mapDispatchToProps = (dispatch)=> {
   return {
-    updateNewMessedgBody: (body) =>{
-      dispatch(onUpdateChangeActionCreator(body));
-    },
-    sendMessage:() =>{
-      dispatch(addMessageActionCreator());
+    sendMessage:(newMessageText) =>{
+      dispatch(addMessageActionCreator(newMessageText));
     }
   }
 }

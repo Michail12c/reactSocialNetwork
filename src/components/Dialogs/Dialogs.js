@@ -3,6 +3,9 @@ import c from './Dialogs.module.css';
 import {NavLink, Redirect} from 'react-router-dom';
 import DialogItem from './DialogItem/DialogItem.js';
 import Message from './Message/Message.js';
+import {Field,reduxForm} from 'redux-form';
+import {TextArea} from '../Common/FormsControls/FormsControls.js';
+import {required, maxLengthCreator} from '../utils/validators/validators.js';
 
 const Dialogs = (props) => {
   console.log(props);
@@ -11,15 +14,10 @@ const Dialogs = (props) => {
  let dialogsElements = state.dialogs.map( dialog => <DialogItem name={dialog.name} id = {dialog.id} key = {dialog.id}/>
   	);
  let messagesElements = state.messages.map(message => <Message message = {message.message} key = {message.id}/> );
- let newMessageBody  = state.newMessageText; 
+ let newMessageText  = state.newMessageText; 
 
- let addMessage = () =>{
-   props.sendMessage();
- }
-
-let onUpdateChange = (e) => {
-  let body = e.target.value;
-  props.updateNewMessedgBody(body);
+let addNewMessadge = (values) => {
+  props.sendMessage(values.newMessageText);
 }
 
  if (!props.isAuth) return <Redirect to = '/login'/>
@@ -30,16 +28,26 @@ let onUpdateChange = (e) => {
        </div>
        <div className={c.messages}>
        	 {messagesElements}
-         <div>
-           <textarea  onChange = {onUpdateChange} value = {props.newMessageText}></textarea>
-         </div>
-         <div>
-           <button type='button' onClick = {addMessage}>add message</button>
-         </div>
+         <AddMessageFormRedux onSubmit = {addNewMessadge}/>
        </div>
      </div>
   
   	)
 }
+const maxLenght50 = maxLengthCreator(50);
+const AddMessageForm = (props)=> {
+  return(
+    <form onSubmit = {props.handleSubmit}>
+      <div>
+         <Field component = {TextArea} validate={[required, maxLenght50]}  name = 'newMessageText' placeholder = 'Enter your message' />
+         </div>
+         <div>
+           <button>add message</button>
+         </div>
+    </form>
+  )
+}
+
+const AddMessageFormRedux = reduxForm({form:'DialogAddMessageForm'})(AddMessageForm);
 
 export default Dialogs;

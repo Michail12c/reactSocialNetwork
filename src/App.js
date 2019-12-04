@@ -9,8 +9,22 @@ import News from './components/News/News.js';
 import Music from './components/Music/Music.js';
 import {BrowserRouter, Route} from 'react-router-dom';
 import UsersContainer from './components/Users/UsersContainer.js';
+import {initializeApp} from './redux/app-reducer.js';
+import {connect} from 'react-redux';
+import {compose} from 'redux';
+import {withRouter} from 'react-router-dom';
+import Preloader from './components/Common/Preloader/Preloader.js';
 
-const App = (props) =>  {
+class App extends React.Component {
+  
+  componentDidMount(){
+    this.props.initializeApp();
+  }
+
+  render(){
+    if(!this.props.initialized){
+      return <Preloader/>
+    }
   return (
    <div className='app-wrapper'>
      <HeaderContainer/>
@@ -25,7 +39,13 @@ const App = (props) =>  {
      </div>
    </div>
   );
+ }
 }
 
+const mapStateToProps = (state) => ({
+   initialized:state.app.initialized
+})
 
-export default App;
+export default compose(
+  withRouter,
+ connect (mapStateToProps, {initializeApp}))(App);
